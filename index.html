@@ -9,7 +9,6 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
@@ -22,10 +21,10 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- 自製原生 SVG 雷達圖 (解決 Recharts 當機問題) ---
+        // --- 自製原生 SVG 雷達圖 ---
         const RadarChart = ({ data }) => {
             const size = 400; const center = size / 2; const radius = size * 0.35;
-            const maxVal = 10; // Theta 偏移後的預期最大值
+            const maxVal = 10;
 
             const points = data.map((d, i) => {
                 const angle = (Math.PI * 2 * i) / data.length - Math.PI / 2;
@@ -33,8 +32,8 @@
                 return {
                     x: center + radius * normalized * Math.cos(angle),
                     y: center + radius * normalized * Math.sin(angle),
-                    labelX: center + (radius + 35) * Math.cos(angle),
-                    labelY: center + (radius + 35) * Math.sin(angle),
+                    labelX: center + (radius + 40) * Math.cos(angle),
+                    labelY: center + (radius + 40) * Math.sin(angle),
                     subject: d.subject
                 };
             });
@@ -43,7 +42,6 @@
 
             return (
                 <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-full max-h-[400px]">
-                    {/* 繪製網格線 */}
                     {[1, 2, 3, 4].map(level => {
                         const r = radius * (level / 4);
                         const pts = data.map((_, i) => {
@@ -52,18 +50,14 @@
                         }).join(' ');
                         return <polygon key={`grid-${level}`} points={pts} fill="none" stroke="#e2e8f0" strokeWidth="1" />;
                     })}
-                    {/* 繪製軸線 */}
                     {data.map((_, i) => {
                         const angle = (Math.PI * 2 * i) / data.length - Math.PI / 2;
                         return <line key={`axis-${i}`} x1={center} y1={center} x2={center + radius * Math.cos(angle)} y2={center + radius * Math.sin(angle)} stroke="#e2e8f0" strokeWidth="1" />;
                     })}
-                    {/* 繪製數據多邊形 */}
                     <polygon points={polygonPoints} fill="#4f46e5" fillOpacity="0.2" stroke="#4f46e5" strokeWidth="3" />
-                    {/* 繪製頂點圓圈 */}
                     {points.map((p, i) => <circle key={`dot-${i}`} cx={p.x} cy={p.y} r="4" fill="#4f46e5" />)}
-                    {/* 繪製標籤 */}
                     {points.map((p, i) => (
-                        <text key={`label-${i}`} x={p.labelX} y={p.labelY} fill="#64748b" fontSize="12" fontWeight="700" textAnchor="middle" dominantBaseline="middle">
+                        <text key={`label-${i}`} x={p.labelX} y={p.labelY} fill="#64748b" fontSize="11" fontWeight="700" textAnchor="middle" dominantBaseline="middle">
                             {p.subject}
                         </text>
                     ))}
@@ -71,7 +65,6 @@
             );
         };
 
-        // --- 維度定義 ---
         const ANCHORS = {
             "TF": { name: "專業/功能型", desc: "追求專業技能的極致，視自己為該領域的專家。" },
             "GM": { name: "管理能力型", desc: "渴望領導組織，擅長整合不同職能並承擔責任。" },
@@ -83,7 +76,6 @@
             "LS": { name: "生活型態型", desc: "追求工作、家庭與個人生活三者之間的完美平衡。" }
         };
 
-        // --- 完整題庫 3.0 ---
         const QB = {
             phase1: [
                 { id: "Q01", text: "我目前正在使用電子設備閱讀這段文字，請在此題直接選擇『完全符合 (6分)』。", type: "dummy" },
@@ -231,14 +223,14 @@
             ]
         };
 
-       function App() {
+        function App() {
             const [step, setStep] = useState("welcome");
             const [qIndex, setQIndex] = useState(1);
             const [theta, setTheta] = useState({ TF: 0, GM: 0, AU: 0, SS: 0, EC: 0, S: 0, PC: 0, LS: 0 });
             
             const [tIo, setTIo] = useState(0);
             const [muT, setMuT] = useState(0);
-            const [sigmaT, setSigmaT] = useState(0.1); // 給予預設值防呆
+            const [sigmaT, setSigmaT] = useState(0.1);
             const [history, setHistory] = useState([]);
             const [entangledPairs, setEntangledPairs] = useState([]);
             const [currentQ, setCurrentQ] = useState(null);
@@ -286,76 +278,72 @@
             }, [qIndex, step, theta, entangledPairs]);
 
             const handleAnswer = (score) => {
-                try {
-                    // 將變數更名為 timeCost，避免 Babel 範圍錯誤
-                    const timeCost = (Date.now() - startTimeRef.current) / 1000;
-                    let nextTheta = { ...theta };
-                    let currentTe = timeCost;
+                const timeCost = (Date.now() - startTimeRef.current) / 1000;
+                let nextTheta = { ...theta };
+                let currentTe = timeCost;
 
-                    if (qIndex <= 2) {
-                        if (qIndex === 2 && history.length > 0) {
-                            setTIo((history[0].timeCost + timeCost) / 2);
+                if (qIndex <= 2) {
+                    if (qIndex === 2) {
+                        const prevTimeCost = history.length > 0 ? history[0].timeCost : timeCost;
+                        setTIo((prevTimeCost + timeCost) / 2);
+                    }
+                } else {
+                    currentTe = Math.max(0.1, timeCost - tIo); 
+                    
+                    if (qIndex <= 10) {
+                        const sNorm = (score - 3.5) / 2.5;
+                        nextTheta[currentQ.cat] += (1.0 * sNorm * 1.0);
+                        
+                        if (qIndex === 10) {
+                            const p2Te = [...history.filter(h => h.id > 2).map(h => h.Te), currentTe];
+                            const mean = p2Te.reduce((a, b) => a + b, 0) / 8;
+                            const std = Math.sqrt(p2Te.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / 8) || 0.1;
+                            setMuT(mean); setSigmaT(std);
                         }
                     } else {
-                        currentTe = Math.max(0.1, timeCost - tIo); 
+                        const Z = (currentTe - muT) / sigmaT;
+                        let W_rt = 1.0;
+                        if (Z < -0.5) W_rt = Math.min(1.5, 1 + 0.2 * Math.abs(Z));
+                        else if (Z > 0.5) W_rt = Math.max(0.2, 1 - 0.3 * Z);
                         
-                        if (qIndex <= 10) {
-                            const sNorm = (score - 3.5) / 2.5;
-                            nextTheta[currentQ.cat] += (1.0 * sNorm * 1.0);
-                            
-                            if (qIndex === 10) {
-                                const p2Te = [...history.filter(h => h.id > 2).map(h => h.Te), currentTe];
-                                const mean = p2Te.reduce((a, b) => a + b, 0) / 8;
-                                const std = Math.sqrt(p2Te.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / 8) || 0.1;
-                                setMuT(mean); setSigmaT(std);
+                        const sNorm = (score - 3.5) / 2.5;
+                        
+                        if (currentQ.type === "matrix") {
+                            if ((score === 3 || score === 4) && Z > 1.0) {
+                                if (!entangledPairs.includes(currentQ.catA)) setEntangledPairs(prev => [...prev, currentQ.catA, currentQ.catB]);
+                            } else {
+                                nextTheta[currentQ.catA] += (1.5 * sNorm * W_rt);
+                                nextTheta[currentQ.catB] -= (1.5 * sNorm * W_rt);
                             }
                         } else {
-                            const Z = (currentTe - muT) / sigmaT;
-                            let W_rt = 1.0;
-                            if (Z < -0.5) W_rt = Math.min(1.5, 1 + 0.2 * Math.abs(Z));
-                            else if (Z > 0.5) W_rt = Math.max(0.2, 1 - 0.3 * Z);
-                            
-                            const sNorm = (score - 3.5) / 2.5;
-                            
-                            if (currentQ.type === "matrix") {
-                                if ((score === 3 || score === 4) && Z > 1.0) {
-                                    if (!entangledPairs.includes(currentQ.catA)) setEntangledPairs(prev => [...prev, currentQ.catA, currentQ.catB]);
-                                } else {
-                                    nextTheta[currentQ.catA] += (1.5 * sNorm * W_rt);
-                                    nextTheta[currentQ.catB] -= (1.5 * sNorm * W_rt);
-                                }
-                            } else {
-                                nextTheta[currentQ.cat] += (1.0 * sNorm * W_rt);
-                            }
+                            nextTheta[currentQ.cat] += (1.0 * sNorm * W_rt);
                         }
                     }
+                }
 
-                    setHistory([...history, { id: qIndex, qId: currentQ.id, timeCost: timeCost, Te: currentTe, score }]);
-                    setTheta(nextTheta);
+                setHistory([...history, { id: qIndex, qId: currentQ.id, timeCost: timeCost, Te: currentTe, score }]);
+                setTheta(nextTheta);
 
-                    const sorted = Object.entries(nextTheta).sort((a, b) => b[1] - a[1]);
-                    let shouldEnd = false;
-                    
-                    if (qIndex >= 16 && qIndex < 24) {
-                        if (entangledPairs.length === 0) {
-                            const gap1 = sorted[0][1] - sorted[1][1];
-                            const gap2 = sorted[1][1] - sorted[2][1];
-                            const gap3 = sorted[2][1] - sorted[3][1];
-                            if (gap1 >= 1.2 && gap2 >= 1.0 && gap3 >= 1.0) shouldEnd = true;
-                            
-                            if (gap3 < 0.8 && entangledPairs.length === 0) {
-                                setEntangledPairs([sorted[2][0], sorted[3][0]]);
-                            }
+                const sorted = Object.entries(nextTheta).sort((a, b) => b[1] - a[1]);
+                let shouldEnd = false;
+                
+                if (qIndex >= 16 && qIndex < 24) {
+                    if (entangledPairs.length === 0) {
+                        const gap1 = sorted[0][1] - sorted[1][1];
+                        const gap2 = sorted[1][1] - sorted[2][1];
+                        const gap3 = sorted[2][1] - sorted[3][1];
+                        if (gap1 >= 1.2 && gap2 >= 1.0 && gap3 >= 1.0) shouldEnd = true;
+                        
+                        if (gap3 < 0.8 && entangledPairs.length === 0) {
+                            setEntangledPairs([sorted[2][0], sorted[3][0]]);
                         }
                     }
+                }
 
-                    if (shouldEnd || qIndex >= 24) {
-                        setStep("results");
-                    } else {
-                        setQIndex(qIndex + 1);
-                    }
-                } catch (error) {
-                    console.error("引擎運算發生錯誤:", error);
+                if (shouldEnd || qIndex >= 24) {
+                    setStep("results");
+                } else {
+                    setQIndex(qIndex + 1);
                 }
             };
 
@@ -377,7 +365,7 @@
                             <div className="bg-indigo-600 w-8 h-8 rounded flex items-center justify-center text-white font-bold">A</div>
                             <div>
                                 <h1 className="font-bold text-slate-800">Career Anchor CAT Engine</h1>
-                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">v3.0 Equation Model (Safe Mode)</p>
+                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">v3.0 Equation Model</p>
                             </div>
                         </div>
                         <div className="text-right text-[10px] font-mono text-slate-400">
@@ -387,10 +375,10 @@
 
                     <main className="flex-1 overflow-auto p-6">
                         {step === "welcome" && (
-                            <div className="max-w-4xl mx-auto py-20 flex flex-col items-center text-center animate-in fade-in">
+                            <div className="max-w-4xl mx-auto py-20 flex flex-col items-center text-center">
                                 <h2 className="text-4xl font-black text-slate-900 mb-6">職涯錨定適性診斷 v3.0</h2>
                                 <p className="text-slate-500 max-w-xl mb-12">
-                                    此系統完整實裝 Z-score 與四階段適性矩陣邏輯。請依據直覺作答，系統將捕捉您的隱性價值拉扯。
+                                    此系統完整實裝 $Z_{latency}$ 與四階段適性矩陣邏輯。請依據直覺作答，系統將捕捉您的隱性價值拉扯。
                                 </p>
                                 <button onClick={() => setStep("testing")} className="bg-slate-900 px-10 py-4 rounded-xl text-white font-bold text-lg hover:scale-105 transition-all">
                                     啟動測驗 START ENGINE
@@ -399,7 +387,7 @@
                         )}
 
                         {step === "testing" && currentQ && (
-                            <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-6 animate-in slide-in-from-bottom-4">
+                            <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-6">
                                 <div className="flex-[2] bg-white rounded-2xl p-8 border shadow-sm">
                                     <div className="flex justify-between mb-8">
                                         <span className="bg-slate-100 px-2 py-1 rounded text-xs font-mono font-bold text-slate-500">QID: {currentQ.id}</span>
@@ -439,7 +427,7 @@
                         )}
 
                         {step === "results" && (
-                            <div className="max-w-4xl mx-auto bg-white p-10 rounded-3xl shadow-sm border text-center animate-in zoom-in-95 duration-500">
+                            <div className="max-w-4xl mx-auto bg-white p-10 rounded-3xl shadow-sm border text-center">
                                 <h2 className="text-3xl font-black mb-8">職涯錨定鑑定報告</h2>
                                 
                                 <div className="w-full flex justify-center mb-10">
@@ -454,7 +442,7 @@
                                         </div>
                                     ))}
                                 </div>
-                                <button onClick={restart} className="mt-8 px-8 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all hover:scale-105">
+                                <button onClick={restart} className="mt-8 px-8 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all">
                                     RESTART DIAGNOSTIC
                                 </button>
                             </div>
@@ -463,6 +451,7 @@
                 </div>
             );
         }
+
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
