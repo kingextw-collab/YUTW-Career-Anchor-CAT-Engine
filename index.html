@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YUTW Career Anchor CAT Engine v3.0</title>
+    <title>YUTW Career Anchor CAT Engine v3.1</title>
     
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -252,7 +252,7 @@
                     if (qIndex === 1) {
                         nextQ = QB.phase1.Q01; 
                     } else if (qIndex === 2) {
-                        // Phase 1: 隨機抽取 A~F (防呆校準)
+                        // Phase 1: Q02 隨機抽取 A~F (防呆校準)
                         nextQ = QB.phase1.Q02[Math.floor(Math.random() * 6)];
                     } else if (qIndex <= 10) {
                         const cat = p2OrderRef.current[qIndex - 3]; 
@@ -375,7 +375,7 @@
                             <div className="bg-indigo-600 w-8 h-8 rounded flex items-center justify-center text-white font-bold">A</div>
                             <div>
                                 <h1 className="font-bold text-slate-800">Career Anchor CAT Engine</h1>
-                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">v3.0 Equation Model</p>
+                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">v3.1 Build (Cache Cleared)</p>
                             </div>
                         </div>
                         <div className="text-right text-[10px] font-mono text-slate-400">
@@ -386,7 +386,7 @@
                     <main className="flex-1 overflow-auto p-6">
                         {step === "welcome" && (
                             <div className="max-w-4xl mx-auto py-20 flex flex-col items-center text-center animate-in fade-in">
-                                <h2 className="text-4xl font-black text-slate-900 mb-6">職涯錨定適性診斷 v3.0</h2>
+                                <h2 className="text-4xl font-black text-slate-900 mb-6">職涯錨定適性診斷 v3.1</h2>
                                 <p className="text-slate-500 max-w-xl mb-12">
                                     此系統完整實裝 Z-score 與四階段適性矩陣邏輯。請依據直覺作答，系統將捕捉您的隱性價值拉扯。
                                 </p>
