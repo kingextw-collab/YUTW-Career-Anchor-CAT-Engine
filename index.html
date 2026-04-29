@@ -77,17 +77,15 @@
         };
 
         const QB = {
-            phase1: {
-                Q01: { id: "Q01", text: "我目前正在使用電子設備閱讀這段文字，請在此題直接選擇『完全符合 (6分)』。", type: "dummy" },
-                Q02: [
-                    { id: "Q02-A", text: "為了協助系統校準，請在此題直接選擇『完全不符合 (1分)』。", type: "dummy" },
-                    { id: "Q02-B", text: "這是一道系統測試題，請直接點選選項『2分』以進入下一題。", type: "dummy" },
-                    { id: "Q02-C", text: "為了確認裝置運作正常，請配合在此題選擇『3分』。", type: "dummy" },
-                    { id: "Q02-D", text: "本題僅用於測試介面反應，看到此文字後，請立刻選擇『4分』。", type: "dummy" },
-                    { id: "Q02-E", text: "請協助驗證數據傳輸穩定度，請在下方選項中精準點選『5分』。", type: "dummy" },
-                    { id: "Q02-F", text: "確認您的輸入設備運作正常，請直接在此題點擊『完全符合 (6分)』。", type: "dummy" }
-                ]
-            },
+			phase1: [
+                { id: "C-01", text: "我目前正在使用電子設備閱讀這段文字，請在此題直接選擇『完全符合 (6分)』。", type: "dummy", expected: 6 },
+                { id: "C-02", text: "為了協助系統校準，請在此題直接選擇『完全不符合 (1分)』。", type: "dummy", expected: 1 },
+                { id: "C-03", text: "這是一道系統測試題，請直接點選選項『2分』以進入下一題。", type: "dummy", expected: 2 },
+                { id: "C-04", text: "為了確認裝置運作正常，請配合在此題選擇『3分』。", type: "dummy", expected: 3 },
+                { id: "C-05", text: "本題僅用於測試介面反應，看到此文字後，請立刻選擇『4分』。", type: "dummy", expected: 4 },
+                { id: "C-06", text: "請協助驗證數據傳輸穩定度，請在下方選項中精準點選『5分』。", type: "dummy", expected: 5 },
+                { id: "C-07", text: "確認您的輸入設備運作正常，請直接在此題點擊『完全符合 (6分)』。", type: "dummy", expected: 6 }
+            ],
             phase2: {
                 "TF": [
                     { id: "TF-01", text: "參與新專案時，我更傾向承擔解決核心專業問題的任務，而非整體的進度控管。" },
@@ -465,19 +463,22 @@
             const [entangledPairs, setEntangledPairs] = useState([]);
             const [currentQ, setCurrentQ] = useState(null);
             
-            const startTimeRef = useRef(0);
+			const startTimeRef = useRef(0);
             const p2OrderRef = useRef(["TF", "GM", "AU", "SS", "EC", "S", "PC", "LS"].sort(() => Math.random() - 0.5));
+            // --- 新增：Phase 1 校準題洗牌陣列 ---
+            const calibOrderRef = useRef([...QB.phase1].sort(() => Math.random() - 0.5));
+            // -----------------------------------
+            const usedMatricesRef = useRef(new Set());
             const usedMatricesRef = useRef(new Set());
 			const [rerollTrigger, setRerollTrigger] = useState(0);
 			
             useEffect(() => {
-                if (step === "testing") {
+					if (step === "testing") {
                     let nextQ;
                     if (qIndex === 1) {
-                        nextQ = QB.phase1.Q01; 
+                        nextQ = calibOrderRef.current[0]; // 拿洗牌後的第一題 
                     } else if (qIndex === 2) {
-                        // Phase 1: Q02 隨機抽取 A~F (防呆校準)
-                        nextQ = QB.phase1.Q02[Math.floor(Math.random() * 6)];
+                        nextQ = calibOrderRef.current[1]; // 拿洗牌後的第二題 (保證不重複)
                     } else if (qIndex <= 10) {
                         const cat = p2OrderRef.current[qIndex - 3]; 
                         nextQ = QB.phase2[cat][Math.floor(Math.random() * 8)];
@@ -529,6 +530,16 @@
 
             const handleAnswer = (score) => {
                 const timeCost = (Date.now() - startTimeRef.current) / 1000;
+				
+				// --- 新增：Phase 1 校準題防呆驗證 ---
+                if (qIndex <= 2) {
+                    if (score !== currentQ.expected) {
+                        alert(`【系統校準失敗】\n您點選了 ${score} 分，但題目指示為 ${currentQ.expected} 分。\n\n請精準依照文字指示作答，以確保測驗時間基準的準確性。`);
+                        startTimeRef.current = Date.now(); // 關鍵：重置計時器，確保下一次點擊是純淨的反應時間
+                        return; // 中斷，要求受測者重新點擊正確選項
+                    }
+                }
+                // ----------------------------------
 				
 				// --- 新增：隱性異常偵測與超時作廢機制 ---
 				// 若在正規測驗階段 (大於第2題)，且作答時間超過 20 秒 (可依實務調整)
@@ -616,6 +627,9 @@
                 setTheta({ TF: 0, GM: 0, AU: 0, SS: 0, EC: 0, S: 0, PC: 0, LS: 0 });
                 usedMatricesRef.current.clear();
                 
+				// --- 新增：重新洗牌校準題庫 ---
+                calibOrderRef.current = [...QB.phase1].sort(() => Math.random() - 0.5);
+				
                 // 清空動態運算的基準變數
                 setTIo(0);
                 setMuT(0);
@@ -744,7 +758,7 @@
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         {sortedResults.map(([k, v]) => (
                                             <div key={k} className="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
-                                                <span className="font-bold text-slate-700">{ANCHORS[k].name} ({k})</span>
+                                                <span className="font-bold text-slate-700">{ANCHORS[k].name}</span>
                                                 <span className="font-mono font-bold text-indigo-600">{v.toFixed(2)}</span>
                                             </div>
                                         ))}
