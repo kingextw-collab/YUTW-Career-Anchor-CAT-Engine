@@ -602,10 +602,18 @@
                 usedMatricesRef.current.clear();
             };
 
-            if (!currentQ && step === "testing") return <div className="p-10 text-center">載入引擎中 Loading Engine...</div>;
+			if (!currentQ && step === "testing") return <div className="p-10 text-center">載入引擎中 Loading Engine...</div>;
 
             const sortedResults = Object.entries(theta).sort((a, b) => b[1] - a[1]);
             const radarData = Object.entries(theta).map(([k, v]) => ({ subject: ANCHORS[k].name, A: v + 5 }));
+
+            // --- 新增：預先計算要顯示的核心數量 (避開 JSX 渲染陷阱) ---
+            let displayCount = 3;
+            if (sortedResults.length > 3 && sortedResults[2][1].toFixed(2) === sortedResults[3][1].toFixed(2)) {
+                displayCount = 4;
+            }
+            const topAnchors = sortedResults.slice(0, displayCount);
+            // --------------------------------------------------------
 
             return (
                 <div className="min-h-screen flex flex-col bg-slate-50">
@@ -682,33 +690,23 @@
                                 <div className="w-full flex justify-center mb-10">
                                     <RadarChart data={radarData} />
                                 </div>
-
+								
 								{/* 顯示核心錨定 (動態 Top 3 或 Top 4) */}
-								<div className="bg-slate-50 p-6 rounded-2xl text-left space-y-6 mb-6">
-									<h3 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b pb-2">核心職涯錨定 (Primary Anchors)</h3>
-									{(() => {
-									// 判斷要顯示幾個核心錨點
-									let displayCount = 3;
-									// 如果第三名和第四名的分數完全相同 (使用 toFixed(2) 確保浮點數比對的精準度)
-									if (sortedResults.length > 3 && 
-										sortedResults[2][1].toFixed(2) === sortedResults[3][1].toFixed(2)) {
-										displayCount = 4;
-									}
-
-									return sortedResults.slice(0, displayCount).map(([k, v], index) => (
-										<div key={k}>
-											<div className="flex items-center gap-2 mb-1">
-												<span className="bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-0.5 rounded">
-													Top {index + 1}
-												</span>
-												<h4 className="text-xl font-bold text-indigo-600">{ANCHORS[k].name}</h4>
-											</div>
-											<p className="text-slate-600 text-sm">{ANCHORS[k].desc}</p>
-										</div>
-										));
-									})()}
-								</div>
-
+                                <div className="bg-slate-50 p-6 rounded-2xl text-left space-y-6 mb-6">
+                                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b pb-2">核心職涯錨定 (Primary Anchors)</h3>
+                                    {topAnchors.map(([k, v], index) => (
+                                        <div key={k}>
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <span className="bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-0.5 rounded">
+                                                    Top {index + 1}
+                                                </span>
+                                                <h4 className="text-xl font-bold text-indigo-600">{ANCHORS[k].name}</h4>
+                                            </div>
+                                            <p className="text-slate-600 text-sm">{ANCHORS[k].desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+								
                                 {/* 顯示八大維度完整得分 */}
                                 <div className="bg-white p-6 rounded-2xl border border-slate-200 text-left space-y-4">
                                     <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b pb-2">八大維度完整得分 (Theta Score)</h3>
