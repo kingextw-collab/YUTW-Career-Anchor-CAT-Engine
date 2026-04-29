@@ -467,14 +467,27 @@
             const [copySuccess, setCopySuccess] = useState(false);
 
             const handleCopyResults = () => {
-                // 將排序後的結果組合成純文字
-                const textToCopy = "【我的職涯錨定診斷結果】\n" + 
-                    sortedResults.map(([k, v]) => `${ANCHORS[k].name}： ${v.toFixed(2)} 分`).join('\n');
+                // 1. 將 Theta 分數轉換為正數基準 (對齊雷達圖的底層邏輯 v + 5)
+                const shiftedScores = Object.entries(theta).map(([k, v]) => ({
+                    key: k,
+                    name: ANCHORS[k].name,
+                    score: Math.max(0, v + 5) // 確保沒有負數，才能計算百分比
+                }));
+
+                // 2. 計算全維度總分，作為分母
+                const totalScore = shiftedScores.reduce((sum, item) => sum + item.score, 0);
+
+                // 3. 轉換為百分比，並組裝成 Gem 看得懂的格式 (包含自動觸發指令)
+                const textToCopy = "您好，這是我剛完成的職涯錨定診斷數據（總和100%），請以此為基礎進行分析：\n\n" + 
+                    shiftedScores.sort((a, b) => b.score - a.score).map(item => {
+                        const percentage = totalScore > 0 ? ((item.score / totalScore) * 100).toFixed(1) : 0;
+                        return `- ${item.name}： ${percentage}%`;
+                    }).join('\n');
                 
                 // 寫入剪貼簿
                 navigator.clipboard.writeText(textToCopy).then(() => {
                     setCopySuccess(true);
-                    setTimeout(() => setCopySuccess(false), 2500); // 2.5秒後恢復按鈕文字
+                    setTimeout(() => setCopySuccess(false), 2500);
                 }).catch(err => {
                     alert("瀏覽器不支援自動複製，請手動選取文字複製！");
                 });
