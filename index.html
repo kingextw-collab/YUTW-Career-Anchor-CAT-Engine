@@ -463,6 +463,24 @@
             const [entangledPairs, setEntangledPairs] = useState([]);
             const [currentQ, setCurrentQ] = useState(null);
             
+            // --- 新增：複製結果的狀態與函數 ---
+            const [copySuccess, setCopySuccess] = useState(false);
+
+            const handleCopyResults = () => {
+                // 將排序後的結果組合成純文字
+                const textToCopy = "【我的職涯錨定診斷結果】\n" + 
+                    sortedResults.map(([k, v]) => `${ANCHORS[k].name}： ${v.toFixed(2)} 分`).join('\n');
+                
+                // 寫入剪貼簿
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    setCopySuccess(true);
+                    setTimeout(() => setCopySuccess(false), 2500); // 2.5秒後恢復按鈕文字
+                }).catch(err => {
+                    alert("瀏覽器不支援自動複製，請手動選取文字複製！");
+                });
+            };
+            // ---------------------------------
+            
 			const startTimeRef = useRef(0);
             const p2OrderRef = useRef(["TF", "GM", "AU", "SS", "EC", "S", "PC", "LS"].sort(() => Math.random() - 0.5));
             // --- 新增：Phase 1 校準題洗牌陣列 ---
@@ -751,16 +769,44 @@
                                     ))}
                                 </div>
 								
-                                {/* 顯示八大維度完整得分 */}
+                                {/* 顯示八大維度完整得分與 Gemini 分析引導 */}
                                 <div className="bg-white p-6 rounded-2xl border border-slate-200 text-left space-y-4">
-                                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b pb-2">八大維度完整得分 (Theta Score)</h3>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="flex justify-between items-center border-b pb-2">
+                                        <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest">八大維度完整得分 (Theta Score)</h3>
+                                        <button 
+                                            onClick={handleCopyResults}
+                                            className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1 shadow-sm ${copySuccess ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'}`}
+                                        >
+                                            {copySuccess ? '✅ 已成功複製！' : '📋 複製分數'}
+                                        </button>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4">
                                         {sortedResults.map(([k, v]) => (
                                             <div key={k} className="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
                                                 <span className="font-bold text-slate-700">{ANCHORS[k].name}</span>
                                                 <span className="font-mono font-bold text-indigo-600">{v.toFixed(2)}</span>
                                             </div>
                                         ))}
+                                    </div>
+
+                                    {/* 新增：分析角色引導區塊 */}
+                                    <div className="mt-2 bg-slate-800 rounded-2xl p-6 text-white text-center space-y-4 shadow-inner">
+                                        <h4 className="text-lg font-black text-amber-400 flex justify-center items-center gap-2">
+                                            <span>✨</span> 獲取 AI 專屬職涯分析報告
+                                        </h4>
+                                        <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+                                            想深入了解這些分數代表的真實意義嗎？<br/>
+                                            請先點擊上方「<strong className="text-white">📋 複製分數</strong>」，然後前往我們專屬的 Gemini AI 助理，將分數貼上即可獲得深度解析與職涯建議！
+                                        </p>
+                                        <a 
+                                            href="https://gemini.google.com/gem/15P_iNv1Jo_aqojAgcz1LlL3chFi7dSoY?usp=sharing" 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="inline-block mt-2 bg-amber-500 text-slate-900 font-black px-8 py-3 rounded-xl hover:bg-amber-400 hover:scale-105 transition-all shadow-lg"
+                                        >
+                                            前往 Gemini 貼上分數分析 ↗
+                                        </a>
                                     </div>
                                 </div>
 
