@@ -468,7 +468,8 @@
             const startTimeRef = useRef(0);
             const p2OrderRef = useRef(["TF", "GM", "AU", "SS", "EC", "S", "PC", "LS"].sort(() => Math.random() - 0.5));
             const usedMatricesRef = useRef(new Set());
-
+			const [rerollTrigger, setRerollTrigger] = useState(0);
+			
             useEffect(() => {
                 if (step === "testing") {
                     let nextQ;
@@ -524,10 +525,20 @@
                     setCurrentQ(nextQ);
                     startTimeRef.current = Date.now();
                 }
-            }, [qIndex, step, theta, entangledPairs]);
+            }, [qIndex, step, theta, entangledPairs, rerollTrigger]); // 加入 rerollTrigger
 
             const handleAnswer = (score) => {
                 const timeCost = (Date.now() - startTimeRef.current) / 1000;
+				
+				// --- 新增：隱性異常偵測與超時作廢機制 ---
+				// 若在正規測驗階段 (大於第2題)，且作答時間超過 20 秒 (可依實務調整)
+				if (qIndex > 2 && timeCost > 20.0) {
+					alert("系統偵測到您的作答可能受到外部中斷。為確保診斷數據的準確性，本題作答無效。系統將為您更換全新情境題，請保持專注繼續作答。");
+					setRerollTrigger(prev => prev + 1); // 觸發重新抽題
+					return; // 強制中斷後續的 Theta 計算與存檔
+				}
+				// ----------------------------------------
+				
                 let nextTheta = { ...theta };
                 let currentTe = timeCost;
 
@@ -597,9 +608,18 @@
             };
 
             const restart = () => {
-                setStep("welcome"); setQIndex(1); setHistory([]); setEntangledPairs([]);
+				// 若有使用 confirm 確認視窗，可在此處或按鈕上實作
+                setStep("welcome"); 
+                setQIndex(1); 
+                setHistory([]); 
+                setEntangledPairs([]);
                 setTheta({ TF: 0, GM: 0, AU: 0, SS: 0, EC: 0, S: 0, PC: 0, LS: 0 });
                 usedMatricesRef.current.clear();
+                
+                // 清空動態運算的基準變數
+                setTIo(0);
+                setMuT(0);
+                setSigmaT(0.1);
             };
 
 			if (!currentQ && step === "testing") return <div className="p-10 text-center">載入引擎中 Loading Engine...</div>;
@@ -646,10 +666,21 @@
                         {step === "testing" && currentQ && (
                             <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-6 animate-in slide-in-from-bottom-4">
                                 <div className="flex-[2] bg-white rounded-2xl p-8 border shadow-sm">
-                                    <div className="flex justify-between mb-8">
-                                        <span className="bg-slate-100 px-2 py-1 rounded text-xs font-mono font-bold text-slate-500">QID: {currentQ.id}</span>
-                                        <span className="text-xs font-bold text-slate-400">Prog: {qIndex}/24</span>
-                                    </div>
+										<div className="flex gap-2">
+                                            <span className="bg-slate-100 px-2 py-1 rounded text-xs font-mono font-bold text-slate-500">QID: {currentQ.id}</span>
+                                            <span className="text-xs font-bold text-slate-400 self-center">Prog: {qIndex}/24</span>
+                                        </div>
+                                        {/* 新增：主動中斷與重新測驗按鈕 (附帶防誤觸確認) */}
+                                        <button 
+                                            onClick={() => {
+                                                if(window.confirm("確定要放棄當前的診斷進度，重新開始測驗嗎？")) {
+                                                    restart();
+                                                }
+                                            }} 
+                                            className="text-xs bg-slate-100 text-slate-500 px-3 py-1 rounded hover:bg-rose-100 hover:text-rose-600 font-bold transition-all"
+                                        >
+                                            ⟳ 中斷並重新測驗
+                                        </button>
                                     <h2 className="text-2xl font-bold text-slate-800 mb-12 min-h-[80px]">{currentQ.text}</h2>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
                                         {[1, 2, 3, 4, 5, 6].map(s => (
