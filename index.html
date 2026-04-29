@@ -809,13 +809,22 @@
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="bg-slate-900 rounded-[2rem] p-8 text-white text-center space-y-5 shadow-2xl">
-                                        <h4 className="text-xl font-black text-amber-400 flex justify-center items-center gap-2">✨ 獲取 AI 深度解析報告</h4>
-                                        <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
-                                            系統已將您的分數換算為 <strong className="text-white">Gemini 專用百分比格式</strong>。請點擊上方按鈕複製後，前往下方連結貼上。
+                                    {/* 新增：分析角色引導區塊 */}
+                                    <div className="mt-2 bg-slate-800 rounded-2xl p-6 text-white text-center space-y-4 shadow-inner">
+                                        <h4 className="text-lg font-black text-amber-400 flex justify-center items-center gap-2">
+                                            <span>✨</span> 獲取 AI 專屬職涯分析報告
+                                        </h4>
+                                        <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+                                            想深入了解這些分數代表的真實意義嗎？<br/>
+                                            請先點擊上方「<strong className="text-white">📋 複製分數</strong>」，然後前往我們專屬的 Gemini AI 助理，將分數貼上即可獲得深度解析與職涯建議！
                                         </p>
-                                        <a href="https://gemini.google.com/gem/15P_iNv1Jo_aqojAgcz1LlL3chFi7dSoY?usp=sharing" target="_blank" rel="noopener noreferrer" className="inline-block bg-amber-500 text-slate-900 font-black px-10 py-4 rounded-2xl hover:bg-amber-400 transition-all shadow-lg text-sm">
-                                            前往 Gemini 貼上分析 ↗
+                                        <a 
+                                            href="https://gemini.google.com/gem/15P_iNv1Jo_aqojAgcz1LlL3chFi7dSoY?usp=sharing" 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="inline-block mt-2 bg-amber-500 text-slate-900 font-black px-8 py-3 rounded-xl hover:bg-amber-400 hover:scale-105 transition-all shadow-lg"
+                                        >
+                                            前往 Gemini 貼上分數分析 ↗
                                         </a>
                                     </div>
                                 </div>
