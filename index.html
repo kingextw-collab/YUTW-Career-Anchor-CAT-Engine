@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YUTW Career Anchor CAT Engine v3.1</title>
+    <title>YUTW Career Anchor CAT Engine v3.2</title>
     
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -264,11 +264,27 @@
                         const t1 = sorted[0][0]; const t2 = sorted[1][0];
                         
                         if (entangledPairs.length > 0) {
-                             const targetCat = entangledPairs[0];
-                             nextQ = QB.phase2[targetCat][Math.floor(Math.random() * 8)];
-                             nextQ.type = "normal";
-                             nextQ.cat = targetCat;
+                            // 觸發糾纏狀態：針對糾纏的兩個維度進行深度拆解
+                            const e1 = entangledPairs[0];
+                            const e2 = entangledPairs[1];
+                            
+                            // 優先尋找這兩個糾纏維度的「衝突矩陣題」
+                            nextQ = QB.matrices.find(m => 
+                                ((m.catA === e1 && m.catB === e2) || (m.catA === e2 && m.catB === e1)) && !usedMatricesRef.current.has(m.id)
+                            );
+                            
+                            if (nextQ) {
+                                usedMatricesRef.current.add(nextQ.id);
+                                nextQ.type = "matrix";
+                            } else {
+                                // 若矩陣題耗盡的防呆降級：在兩個糾纏維度中隨機選一個出常規題
+                                const targetCat = Math.random() > 0.5 ? e1 : e2;
+                                nextQ = QB.phase2[targetCat][Math.floor(Math.random() * 8)];
+                                nextQ.type = "normal";
+                                nextQ.cat = targetCat;
+                            }
                         } else {
+                            // 正常狀態：針對 Top 1 與 Top 2 尋找矩陣題
                             nextQ = QB.matrices.find(m => 
                                 ((m.catA === t1 && m.catB === t2) || (m.catA === t2 && m.catB === t1)) && !usedMatricesRef.current.has(m.id)
                             );
@@ -375,7 +391,7 @@
                             <div className="bg-indigo-600 w-8 h-8 rounded flex items-center justify-center text-white font-bold">A</div>
                             <div>
                                 <h1 className="font-bold text-slate-800">Career Anchor CAT Engine</h1>
-                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">v3.1 Build (Cache Cleared)</p>
+                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">v3.2 Build</p>
                             </div>
                         </div>
                         <div className="text-right text-[10px] font-mono text-slate-400">
@@ -386,7 +402,7 @@
                     <main className="flex-1 overflow-auto p-6">
                         {step === "welcome" && (
                             <div className="max-w-4xl mx-auto py-20 flex flex-col items-center text-center animate-in fade-in">
-                                <h2 className="text-4xl font-black text-slate-900 mb-6">職涯錨定適性診斷 v3.1</h2>
+                                <h2 className="text-4xl font-black text-slate-900 mb-6">職涯錨定適性診斷 v3.2</h2>
                                 <p className="text-slate-500 max-w-xl mb-12">
                                     此系統完整實裝 Z-score 與四階段適性矩陣邏輯。請依據直覺作答，系統將捕捉您的隱性價值拉扯。
                                 </p>
@@ -455,7 +471,7 @@
                                     ))}
                                 </div>
 
-                                {/* 新增：顯示八大維度完整得分 */}
+                                {/* 顯示八大維度完整得分 */}
                                 <div className="bg-white p-6 rounded-2xl border border-slate-200 text-left space-y-4">
                                     <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b pb-2">八大維度完整得分 (Theta Score)</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -469,7 +485,7 @@
                                 </div>
 
                                 <button onClick={restart} className="mt-8 px-8 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all hover:scale-105">
-                                    重啟診斷
+                                    RESTART DIAGNOSTIC
                                 </button>
                             </div>
                         )}
