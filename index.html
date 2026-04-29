@@ -683,16 +683,31 @@
                                     <RadarChart data={radarData} />
                                 </div>
 
-                                {/* 顯示核心錨定 (Top 2) */}
-                                <div className="bg-slate-50 p-6 rounded-2xl text-left space-y-6 mb-6">
-                                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b pb-2">核心職涯錨定 (Primary Anchors)</h3>
-                                    {sortedResults.slice(0, 2).map(([k, v]) => (
-                                        <div key={k}>
-                                            <h4 className="text-xl font-bold text-indigo-600 mb-1">{ANCHORS[k].name}</h4>
-                                            <p className="text-slate-600 text-sm">{ANCHORS[k].desc}</p>
-                                        </div>
-                                    ))}
-                                </div>
+								{/* 顯示核心錨定 (動態 Top 3 或 Top 4) */}
+								<div className="bg-slate-50 p-6 rounded-2xl text-left space-y-6 mb-6">
+									<h3 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b pb-2">核心職涯錨定 (Primary Anchors)</h3>
+									{(() => {
+									// 判斷要顯示幾個核心錨點
+									let displayCount = 3;
+									// 如果第三名和第四名的分數完全相同 (使用 toFixed(2) 確保浮點數比對的精準度)
+									if (sortedResults.length > 3 && 
+										sortedResults[2][1].toFixed(2) === sortedResults[3][1].toFixed(2)) {
+										displayCount = 4;
+									}
+
+									return sortedResults.slice(0, displayCount).map(([k, v], index) => (
+										<div key={k}>
+											<div className="flex items-center gap-2 mb-1">
+												<span className="bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-0.5 rounded">
+													Top {index + 1}
+												</span>
+												<h4 className="text-xl font-bold text-indigo-600">{ANCHORS[k].name}</h4>
+											</div>
+											<p className="text-slate-600 text-sm">{ANCHORS[k].desc}</p>
+										</div>
+										));
+									})()}
+								</div>
 
                                 {/* 顯示八大維度完整得分 */}
                                 <div className="bg-white p-6 rounded-2xl border border-slate-200 text-left space-y-4">
