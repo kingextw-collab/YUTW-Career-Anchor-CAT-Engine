@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YUTW Career Anchor CAT Engine v3.4</title>
+    <title>YUTW Career Anchor CAT Engine v3.5</title>
     
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -19,7 +19,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState, useRef } = React;
 
         const RadarChart = ({ data }) => {
             const size = 400; const center = size / 2; const radius = size * 0.35;
@@ -73,7 +73,7 @@
         };
 
         const QB = {
-            phase1: [
+			phase1: [
                 { id: "C-01", text: "我目前正在使用電子設備閱讀這段文字，請在此題直接選擇『完全符合 (6分)』。", type: "dummy", expected: 6 },
                 { id: "C-02", text: "為了協助系統校準，請在此題直接選擇『完全不符合 (1分)』。", type: "dummy", expected: 1 },
                 { id: "C-03", text: "這是一道系統測試題，請直接點選選項『2分』以進入下一題。", type: "dummy", expected: 2 },
@@ -92,10 +92,10 @@
                     { id: "TF-06", text: "遇到異常狀況時，我會堅持追查問題的根本原因，而非採取暫時性的補救方案。" },
                     { id: "TF-07", text: "我習慣透過優化標準流程或運用高效工具來精確完成任務，並對此成果感到自豪。" },
                     { id: "TF-08", text: "當討論偏離事實或專業標準時，我會毫不猶豫地提出糾正，無論對象的職級高低。" },
-                    { id: "TF-09", text: "我熱衷於追蹤業界最前沿的專業理論，即便這些知識暫時無法應用在目前的工作中。" },
-                    { id: "TF-10", text: "我希望被同事視為「解決特定難題的最終權威」，而非「樣樣通樣樣鬆」的多面手。" },
-                    { id: "TF-11", text: "我更願意將時間花在提升產出的細節品質，而不是去參與提升組織知名度的公關活動。" },
-                    { id: "TF-12", text: "對我來說，職場晉升的意義在於能獲得更多資源來精進我的專業研究，而非獲得管理權力。" }
+					{ id: "TF-09", text: "我熱衷於追蹤業界最前沿的專業理論，即便這些知識暫時無法應用在目前的工作中。" },
+					{ id: "TF-10", text: "我希望被同事視為「解決特定難題的最終權威」，而非「樣樣通樣樣鬆」的多面手。" },
+					{ id: "TF-11", text: "我更願意將時間花在提升產出的細節品質，而不是去參與提升組織知名度的公關活動。" },
+					{ id: "TF-12", text: "對我來說，職場晉升的意義在於能獲得更多資源來精進我的專業研究，而非獲得管理權力。" }
                 ],
                 "GM": [
                     { id: "GM-01", text: "面對權責模糊的任務，我習慣主動釐清各方分工並協調資源以達成目標。" },
@@ -106,10 +106,10 @@
                     { id: "GM-06", text: "在大型活動或複雜計畫中，我期望擔任指揮全局的統籌協調角色。" },
                     { id: "GM-07", text: "面對不同獲利模式的決策，我能基於數據與策略做出資源取捨，而不受個人情感影響。" },
                     { id: "GM-08", text: "我享受在利益衝突中進行溝通協商，並最終引導各方達成共識的過程。" },
-                    { id: "GM-09", text: "我擅長觀察不同成員的特質，並將他們安置在最能發揮組織綜效的位置。" },
-                    { id: "GM-10", text: "當團隊發生意見分歧時，我享受那種透過權衡與決策，最終帶領大家達成目標的掌控感。" },
-                    { id: "GM-11", text: "成功的定義在於我所負責的部門是否能維持長期的獲利與高效的營運節奏。" },
-                    { id: "GM-12", text: "我願意承擔高度壓力去應對與高層或外部合作對象的複雜談判，以確保組織利益。" }
+					{ id: "GM-09", text: "我擅長觀察不同成員的特質，並將他們安置在最能發揮組織綜效的位置。" },
+					{ id: "GM-10", text: "當團隊發生意見分歧時，我享受那種透過權衡與決策，最終帶領大家達成目標的掌控感。" },
+					{ id: "GM-11", text: "成功的定義在於我所負責的部門是否能維持長期的獲利與高效的營運節奏。" },
+					{ id: "GM-12", text: "我願意承擔高度壓力去應對與高層或外部合作對象的複雜談判，以確保組織利益。" }
                 ],
                 "AU": [
                     { id: "AU-01", text: "只要能如期交付成果，我期望能完全自行決定工作的方式、順序與時間分配。" },
@@ -120,10 +120,10 @@
                     { id: "AU-06", text: "我寧可承擔獨立專案的壓力，也不願在步調緩慢且需頻繁相互妥協的團隊中磨耗。" },
                     { id: "AU-07", text: "當組織程序干擾到我的作業效率時，我會設法簡化繁文縟節以維持產出。" },
                     { id: "AU-08", text: "我適合擔任外部專業顧問，只在關鍵節點提供產出，而不必介入日常瑣碎行政。" },
-                    { id: "AU-09", text: "我更傾向承接「一人專案」，因為這樣我可以完全掌握產出的品質與作業節奏。" },
-                    { id: "AU-10", text: "只要能達成最終目標，我非常反感組織強迫我必須使用特定且死板的標準作業流程。" },
-                    { id: "AU-11", text: "我追求的是一種「只要我有產出，就沒人能管我」的工作環境。" },
-                    { id: "AU-12", text: "若工作環境充滿了各種瑣碎的會議與回報制度，即使薪水再高我也會感到窒息。" }
+					{ id: "AU-09", text: "我更傾向承接「一人專案」，因為這樣我可以完全掌握產出的品質與作業節奏。" },
+					{ id: "AU-10", text: "只要能達成最終目標，我非常反感組織強迫我必須使用特定且死板的標準作業流程。" },
+					{ id: "AU-11", text: "我追求的是一種「只要我有產出，就沒人能管我」的工作環境。" },
+					{ id: "AU-12", text: "若工作環境充滿了各種瑣碎的會議與回報制度，即使薪水再高我也會感到窒息。" }
                 ],
                 "SS": [
                     { id: "SS-01", text: "選擇工作時，我優先考量清晰的考核指標、穩定的晉升路徑與優渥的薪酬結構。" },
@@ -134,10 +134,10 @@
                     { id: "SS-06", text: "如果一項創新方案存在明顯的不可控風險，我寧可維持現有的穩定做法。" },
                     { id: "SS-07", text: "我傾向在同一家公司深耕，透過建立穩定的組織關係與經驗來確保個人的不可替代性。" },
                     { id: "SS-08", text: "我的職涯與財務規劃都偏向追求長期穩定，避免參與波動過大的項目。" },
-                    { id: "SS-09", text: "我在做任何決定前，都會優先確認其是否符合公司的既有政策與勞動合約保障。" },
-                    { id: "SS-10", text: "我看重職位的「可預測性」，希望每天早晨都能清楚知道今天的工作任務與規範。" },
-                    { id: "SS-11", text: "相比於個人英雄主義的表現，我更看重組織是否有一套運作成熟且抗風險的避險體制。" },
-                    { id: "SS-12", text: "我傾向於在一家聲譽優良且幾乎不可能倒閉的機構中度過我的整個職涯。" }
+					{ id: "SS-09", text: "我在做任何決定前，都會優先確認其是否符合公司的既有政策與勞動合約保障。" },
+					{ id: "SS-10", text: "我看重職位的「可預測性」，希望每天早晨都能清楚知道今天的工作任務與規範。" },
+					{ id: "SS-11", text: "相比於個人英雄主義的表現，我更看重組織是否有一套運作成熟且抗風險的避險體制。" },
+					{ id: "SS-12", text: "我傾向於在一家聲譽優良且幾乎不可能倒閉的機構中度過我的整個職涯。" }
                 ],
                 "EC": [
                     { id: "EC-01", text: "比起優化現有的成熟產品，我對推動「從零到一」的新專案或商業模式更有熱情。" },
@@ -148,10 +148,10 @@
                     { id: "EC-06", text: "我經常向決策層提案，爭取資源去開拓一個不受既有規章限制的新領域。" },
                     { id: "EC-07", text: "只要能讓我的創意落地執行，我願意忍受項目初期的混亂與資源匱乏。" },
                     { id: "EC-08", text: "我將每一次的轉職視為累積人脈與經驗的過程，最終目標是實現個人的開創計畫。" },
-                    { id: "EC-09", text: "我隨時都在評估目前的工作經驗，是否能轉化為未來我獨立創業時的核心競爭力。" },
-                    { id: "EC-10", text: "看到別人的成功商業模式時，我的第一反應是思考我如何能做得更好或開發出差異化產品。" },
-                    { id: "EC-11", text: "我享受將一個抽象的點子逐步轉化為實體產出並推向市場的完整過程。" },
-                    { id: "EC-12", text: "與其在體制內等待年度調薪，我更渴望透過主導新事業的成長來獲得爆發性的回報。" }
+					{ id: "EC-09", text: "我隨時都在評估目前的工作經驗，是否能轉化為未來我獨立創業時的核心競爭力。" },
+					{ id: "EC-10", text: "看到別人的成功商業模式時，我的第一反應是思考我如何能做得更好或開發出差異化產品。" },
+					{ id: "EC-11", text: "我享受將一個抽象的點子逐步轉化為實體產出並推向市場的完整過程。" },
+					{ id: "EC-12", text: "與其在體制內等待年度調薪，我更渴望透過主導新事業的成長來獲得爆發性的回報。" }
                 ],
                 "S": [
                     { id: "S-01", text: "除了追求利潤，我同樣重視專案是否對社會大眾、客戶或同事帶來正向的影響。" },
@@ -162,10 +162,10 @@
                     { id: "S-06", text: "當同仁遇到瓶頸時，我會願意放下手邊工作提供指導與支援，即便這不計入考核績效。" },
                     { id: "S-07", text: "企業的價值觀與社會責任實踐，是我判斷是否為其長期效力的核心基準。" },
                     { id: "S-08", text: "一份無法讓世界變得更好的工作，即使薪酬再高，對我來說也是空虛的。" },
-                    { id: "S-09", text: "評估一份工作的價值時，我會優先看它是否解決了某個真實存在的社會問題或人類需求。" },
-                    { id: "S-10", text: "我傾向選擇與我價值觀一致的夥伴協作，即便這意味著我們必須放棄更高利潤的合作機會。" },
-                    { id: "S-11", text: "當同事遇到人生低谷時，我認為提供情感支持與實質幫助，是比達成進度更重要的職業素養。" },
-                    { id: "S-12", text: "能夠感受到自己的工作正在讓別人的生活品質提升，是我每日工作的核心動力。" }
+					{ id: "S-09", text: "評估一份工作的價值時，我會優先看它是否解決了某個真實存在的社會問題或人類需求。" },
+					{ id: "S-10", text: "我傾向選擇與我價值觀一致的夥伴協作，即便這意味著我們必須放棄更高利潤的合作機會。" },
+					{ id: "S-11", text: "當同事遇到人生低谷時，我認為提供情感支持與實質幫助，是比達成進度更重要的職業素養。" },
+					{ id: "S-12", text: "能夠感受到自己的工作正在讓別人的生活品質提升，是我每日工作的核心動力。" }
                 ],
                 "PC": [
                     { id: "PC-01", text: "當任務變得容易預測時，我會主動尋找他人視為「不可能完成」的高難度挑戰。" },
@@ -176,10 +176,10 @@
                     { id: "PC-06", text: "我熱衷於接手瀕臨崩潰的計畫，並享受將其從逆境中翻轉過來的快感。" },
                     { id: "PC-07", text: "在專業角逐或市場競爭中，我渴望在策略上徹底超越競爭對手。" },
                     { id: "PC-08", text: "單調且重複性高的工作會消耗我的生命力，我需要持續的緊迫感來保持熱情。" },
-                    { id: "PC-09", text: "當競爭對手採取了更激進的市場策略時，我會感到亢奮並激發出更強的求勝欲望。" },
-                    { id: "PC-10", text: "我喜歡接手那些被前人視為「無解」的疑難雜症，並透過創新的方式將其攻破。" },
-                    { id: "PC-11", text: "如果一個目標太容易達成，我會覺得在浪費我的時間，進而失去工作的專注度。" },
-                    { id: "PC-12", text: "面對高度不確定的局勢，我傾向採取積極攻勢，享受在變動中尋找生存空隙的刺激感。" }
+					{ id: "PC-09", text: "當競爭對手採取了更激進的市場策略時，我會感到亢奮並激發出更強的求勝欲望。" },
+					{ id: "PC-10", text: "我喜歡接手那些被前人視為「無解」的疑難雜症，並透過創新的方式將其攻破。" },
+					{ id: "PC-11", text: "如果一個目標太容易達成，我會覺得在浪費我的時間，進而失去工作的專注度。" },
+					{ id: "PC-12", text: "面對高度不確定的局勢，我傾向採取積極攻勢，享受在變動中尋找生存空隙的刺激感。" }
                 ],
                 "LS": [
                     { id: "LS-01", text: "我會設立明確界線，確保工作的要求不會長期侵犯我與家人相處或私人生活的空間。" },
@@ -190,13 +190,13 @@
                     { id: "LS-06", text: "對我而言，能自由支配下班後的時間來發展興趣，比在職場晉升更具吸引力。" },
                     { id: "LS-07", text: "我絕不允許工作上的聯繫或突發事件，在休假期間打斷我與親友的相處。" },
                     { id: "LS-08", text: "成功的職涯定義在於達到「生活與工作的完美平衡」，而非無止盡追求職位成就。" },
-                    { id: "LS-09", text: "如果一個高薪職位要求我必須長期外派或頻繁出差，我會因為其對生活品質的破壞而拒絕。" },
-                    { id: "LS-10", text: "我習慣在行事曆上優先排定家庭聚會與私人活動，然後才填入工作時程。" },
-                    { id: "LS-11", text: "我對成功的定義是：在職場上表現稱職，同時擁有足夠的體力與心情享受業餘生活。" },
-                    { id: "LS-12", text: "我高度認同公司應該全面支援員工的心理健康，並尊重每個人在非辦公時間的「斷網權」。" }
+					{ id: "LS-09", text: "如果一個高薪職位要求我必須長期外派或頻繁出差，我會因為其對生活品質的破壞而拒絕。" },
+					{ id: "LS-10", text: "我習慣在行事曆上優先排定家庭聚會與私人活動，然後才填入工作時程。" },
+					{ id: "LS-11", text: "我對成功的定義是：在職場上表現稱職，同時擁有足夠的體力與心情享受業餘生活。" },
+					{ id: "LS-12", text: "我高度認同公司應該全面支援員工的心理健康，並尊重每個人在非辦公時間的「斷網權」。" }
                 ]
             },
-            matrices: [
+			matrices: [
                 // [矩陣 01] 專業 (TF) vs. 管理 (GM)
                 { id: "C-TFGM-01", text: "面對核心業務流程整併時，我傾向親自規劃內部的運算邏輯，而非計算長期的人事成本與跨部門溝通。", catA: "TF", catB: "GM" },
                 { id: "C-TFGM-02", text: "當面臨關鍵業務模式變更時，我傾向親自驗證每個執行環節的正確性，而非授權他人並專注向高層報告。", catA: "TF", catB: "GM" },
@@ -365,7 +365,7 @@
                 { id: "C-LSEC-03", text: "一份能穩定產出現金流、且絕對不佔用任何私人時間的資產組合，比可能成為獨角獸的新事業更具吸引力。", catA: "LS", catB: "EC" },
                 { id: "C-LSEC-04", text: "我對於「成功的定義」在於生活與家庭的和諧，而非擁有多少具備市場價值的創業股權。", catA: "LS", catB: "EC" },
 
-                // [矩陣 29] 服務 (S) vs. 專業 (TF)
+				// [矩陣 29] 服務 (S) vs. 專業 (TF)
                 { id: "C-STF-01", text: "當作業流程頻繁出現不影響產出但令人困惑的小錯誤時，我會優先花時間製作教學指引安撫並幫助同仁理解，而不是鑽研下一個更深奧的核心模式。", catA: "S", catB: "TF" },
                 { id: "C-STF-02", text: "看到其他部門的同事因為操作不順而感到嚴重挫折時，我寧願暫停手邊複雜的專案，花整個下午耐心指導對方，這比我獨自完成任務更有成就感。", catA: "S", catB: "TF" },
                 { id: "C-STF-03", text: "在經營事業時，如果客戶反映流程不好用，我會優先考量使用者的需求，尋找最具人情味的處理方式，而不是導入一套效能頂尖但缺乏溫度的自動化系統。", catA: "S", catB: "TF" },
@@ -449,7 +449,7 @@
                 { id: "C-SSEC-03", text: "對我而言，一份月薪固定但保證能讓我安穩退休的行政職缺，勝過一個號稱未來能讓我獲得千萬分配股權的創辦人機會。", catA: "SS", catB: "EC" },
                 { id: "C-SSEC-04", text: "我會將積蓄放在具備高保障、低風險的避險計畫中，而非拿去投資充滿變數的新創事業。", catA: "SS", catB: "EC" },
 
-                // [矩陣 43] 自主 (AU) vs. 專業 (TF)
+				// [矩陣 43] 自主 (AU) vs. 專業 (TF)
                 { id: "C-AUTF-01", text: "若精進某項技術需要我參加嚴格的實體培訓，我會因為這限制了我的彈性而考慮放棄。", catA: "AU", catB: "TF" },
                 { id: "C-AUTF-02", text: "當面對一個強制要求成員遵循極度嚴格規範與繁瑣審查流程的系統時，我會為了爭取個人作業的隨性與自由而選擇離開。", catA: "AU", catB: "TF" },
                 { id: "C-AUTF-03", text: "我認為「用我喜歡的方式把任務解掉」比「使用業界公認最權威的作業框架來解決」更為重要。", catA: "AU", catB: "TF" },
@@ -535,6 +535,9 @@
             ]
         };
 
+        // 幫手函式：打亂陣列
+        const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
+
         function App() {
             const [step, setStep] = useState("welcome");
             const [qIndex, setQIndex] = useState(1);
@@ -545,30 +548,178 @@
             const [history, setHistory] = useState([]);
             const [entangledPairs, setEntangledPairs] = useState([]);
             const [currentQ, setCurrentQ] = useState(null);
-            const [rerollTrigger, setRerollTrigger] = useState(0);
             const [copySuccess, setCopySuccess] = useState(false);
 
+            // 核心重構：把題庫轉換成「洗好的牌堆」
+            const decksRef = useRef({});
+            const matrixUsedRef = useRef(new Set());
+            const calibDeckRef = useRef([]);
+            const p2OrderRef = useRef([]);
             const startTimeRef = useRef(0);
-            
-            const p2OrderRef = useRef(
-                ["TF", "GM", "AU", "SS", "EC", "S", "PC", "LS", 
-                 "TF", "GM", "AU", "SS", "EC", "S", "PC", "LS", 
-                 "TF", "GM", "AU", "SS", "EC", "S", "PC", "LS"]
-                .sort(() => Math.random() - 0.5)
-            );
-            const calibOrderRef = useRef([...QB.phase1].sort(() => Math.random() - 0.5));
-            const usedMatricesRef = useRef(new Set());
-            const usedNormalQsRef = useRef(new Set()); // 新增：用於記錄一般題防止重複
 
-            const handlePause = () => { /* 已由超時機制取代 */ };
+            // 初始化與洗牌引擎
+            const initEngine = () => {
+                const newDecks = {};
+                Object.keys(QB.phase2).forEach(cat => {
+                    newDecks[cat] = shuffleArray(QB.phase2[cat]);
+                });
+                decksRef.current = newDecks;
+                matrixUsedRef.current.clear();
+                
+                calibDeckRef.current = shuffleArray(QB.phase1);
+                p2OrderRef.current = shuffleArray([
+                    "TF", "GM", "AU", "SS", "EC", "S", "PC", "LS", 
+                    "TF", "GM", "AU", "SS", "EC", "S", "PC", "LS", 
+                    "TF", "GM", "AU", "SS", "EC", "S", "PC", "LS"
+                ]);
+            };
 
-            const restart = () => {
-                setStep("welcome"); setQIndex(1); setHistory([]); setEntangledPairs([]);
+            // 抽牌邏輯（絕對不重複）
+            const drawNextQuestion = (nextIndex, currentTheta, currentEntangled) => {
+                let nextQ = null;
+
+                if (nextIndex <= 2) {
+                    nextQ = calibDeckRef.current.pop();
+                } else if (nextIndex <= 26) {
+                    const cat = p2OrderRef.current[nextIndex - 3];
+                    // 從牌堆頂端抽一張，若真抽完才重洗（理論上不可能，因為準備了12張只抽3張）
+                    if (decksRef.current[cat].length === 0) {
+                        decksRef.current[cat] = shuffleArray(QB.phase2[cat]);
+                    }
+                    nextQ = { ...decksRef.current[cat].pop(), type: "normal", cat };
+                } else {
+                    const sorted = Object.entries(currentTheta).sort((a, b) => b[1] - a[1]);
+                    const t1 = sorted[0][0]; const t2 = sorted[1][0];
+                    let tryMatrix = null;
+
+                    if (currentEntangled.length > 0) {
+                        const e1 = currentEntangled[0]; const e2 = currentEntangled[1];
+                        tryMatrix = QB.matrices.find(m => ((m.catA === e1 && m.catB === e2) || (m.catA === e2 && m.catB === e1)) && !matrixUsedRef.current.has(m.id));
+                        if (tryMatrix) {
+                            matrixUsedRef.current.add(tryMatrix.id);
+                            nextQ = { ...tryMatrix, type: "matrix" };
+                        } else {
+                            const targetCat = Math.random() > 0.5 ? e1 : e2;
+                            if (decksRef.current[targetCat].length === 0) decksRef.current[targetCat] = shuffleArray(QB.phase2[targetCat]);
+                            nextQ = { ...decksRef.current[targetCat].pop(), type: "normal", cat: targetCat };
+                        }
+                    } else {
+                        tryMatrix = QB.matrices.find(m => ((m.catA === t1 && m.catB === t2) || (m.catA === t2 && m.catB === t1)) && !matrixUsedRef.current.has(m.id));
+                        if (tryMatrix) {
+                            matrixUsedRef.current.add(tryMatrix.id);
+                            nextQ = { ...tryMatrix, type: "matrix" };
+                        } else {
+                            if (decksRef.current[t1].length === 0) decksRef.current[t1] = shuffleArray(QB.phase2[t1]);
+                            nextQ = { ...decksRef.current[t1].pop(), type: "normal", cat: t1 };
+                        }
+                    }
+                }
+                
+                setCurrentQ(nextQ);
+                startTimeRef.current = Date.now();
+            };
+
+            const startTest = () => {
+                initEngine();
+                setStep("testing");
+                setQIndex(1);
+                setHistory([]); 
+                setEntangledPairs([]);
                 setTheta({ TF: 0, GM: 0, AU: 0, SS: 0, EC: 0, S: 0, PC: 0, LS: 0 });
-                usedMatricesRef.current.clear();
-                usedNormalQsRef.current.clear(); // 新增：重測時清空一般題紀錄
-                calibOrderRef.current = [...QB.phase1].sort(() => Math.random() - 0.5);
                 setTIo(0); setMuT(0); setSigmaT(0.1);
+                
+                // 明確抽出第一題
+                drawNextQuestion(1, { TF: 0, GM: 0, AU: 0, SS: 0, EC: 0, S: 0, PC: 0, LS: 0 }, []);
+            };
+
+            const handleAnswer = (score) => {
+                const timeCost = (Date.now() - startTimeRef.current) / 1000;
+                
+                if (qIndex <= 2 && score !== currentQ.expected) {
+                    alert(`【系統校準失敗】\n指示為 ${currentQ.expected} 分，您點選了 ${score} 分。請精準依照指示作答。`);
+                    startTimeRef.current = Date.now(); 
+                    return;
+                }
+                
+                if (qIndex > 2 && timeCost > 20.0) {
+                    alert("偵測到作答中斷。為確保數據準確，本題作廢並換題，請保持專注。");
+                    drawNextQuestion(qIndex, theta, entangledPairs); 
+                    return;
+                }
+
+                let nextTheta = { ...theta };
+                let currentTe = timeCost;
+                let newTIo = tIo;
+                let newMuT = muT;
+                let newSigmaT = sigmaT;
+                let nextEntangled = [...entangledPairs];
+
+                // 算分邏輯 (與原版完全一致)
+                if (qIndex <= 2) {
+                    if (qIndex === 2) {
+                        const prevTimeCost = history.length > 0 ? history[0].timeCost : timeCost;
+                        newTIo = (prevTimeCost + timeCost) / 2;
+                        setTIo(newTIo);
+                    }
+                } else {
+                    currentTe = Math.max(0.1, timeCost - newTIo); 
+                    if (qIndex <= 26) {
+                        const sNorm = (score - 3.5) / 2.5;
+                        nextTheta[currentQ.cat] += (1.0 * sNorm * 1.0);
+                        if (qIndex === 26) {
+                            const p2Te = [...history.filter(h => h.id > 2).map(h => h.Te), currentTe];
+                            newMuT = p2Te.reduce((a, b) => a + b, 0) / 24;
+                            newSigmaT = Math.sqrt(p2Te.reduce((a, b) => a + Math.pow(b - newMuT, 2), 0) / 24) || 0.1;
+                            setMuT(newMuT); setSigmaT(newSigmaT);
+                        }
+                    } else {
+                        const Z = (currentTe - newMuT) / newSigmaT;
+                        let W_rt = 1.0;
+                        if (Z < -0.5) W_rt = Math.min(1.5, 1 + 0.2 * Math.abs(Z));
+                        else if (Z > 0.5) W_rt = Math.max(0.2, 1 - 0.3 * Z);
+                        const sNorm = (score - 3.5) / 2.5;
+                        
+                        if (currentQ.type === "matrix") {
+                            if ((score === 3 || score === 4) && Z > 1.0) {
+                                if (!nextEntangled.includes(currentQ.catA)) nextEntangled.push(currentQ.catA, currentQ.catB);
+                            } else {
+                                nextTheta[currentQ.catA] += (1.5 * sNorm * W_rt);
+                                nextTheta[currentQ.catB] -= (1.5 * sNorm * W_rt);
+                            }
+                        } else { 
+                            nextTheta[currentQ.cat] += (1.0 * sNorm * W_rt); 
+                        }
+                    }
+                }
+
+                setHistory([...history, { id: qIndex, qId: currentQ.id, timeCost, Te: currentTe, score }]);
+                setTheta(nextTheta);
+                setEntangledPairs(nextEntangled);
+
+                const sorted = Object.entries(nextTheta).sort((a, b) => b[1] - a[1]);
+                let shouldEnd = false;
+                if (qIndex >= 32 && qIndex < 40) {
+                    if (nextEntangled.length === 0) {
+                        const gap1 = sorted[0][1] - sorted[1][1];
+                        const gap2 = sorted[1][1] - sorted[2][1];
+                        const gap3 = sorted[2][1] - sorted[3][1];
+                        if (gap1 >= 1.8 && gap2 >= 1.5 && gap3 >= 1.5) shouldEnd = true;
+                        if (gap3 < 1.0 && nextEntangled.length === 0) { 
+                            nextEntangled = [sorted[2][0], sorted[3][0]]; 
+                            setEntangledPairs(nextEntangled);
+                        }
+                    }
+                }
+
+                // 核心重構：決定出題或結束
+                if (shouldEnd || qIndex >= 40) { 
+                    setStep("results"); 
+                } else { 
+                    const nextIndex = qIndex + 1;
+                    setQIndex(nextIndex);
+                    // 將最新算出的狀態直接餵給抽牌器
+                    drawNextQuestion(nextIndex, nextTheta, nextEntangled);
+                }
             };
 
             const handleCopyResults = () => {
@@ -597,125 +748,6 @@
                 });
             };
 
-            useEffect(() => {
-                if (step === "testing") {
-                    let nextQ;
-
-                    // 新增：安全抽取一般題的 Helper 函式
-                    const getRandomUnusedQ = (cat) => {
-                        let availableQs = QB.phase2[cat].filter(q => !usedNormalQsRef.current.has(q.id));
-                        // 防呆：如果題庫真被抽完，退回全題庫
-                        if (availableQs.length === 0) availableQs = QB.phase2[cat];
-                        const q = availableQs[Math.floor(Math.random() * availableQs.length)];
-                        usedNormalQsRef.current.add(q.id);
-                        return { ...q, type: "normal", cat: cat };
-                    };
-
-                    if (qIndex === 1) {
-                        nextQ = calibOrderRef.current[0]; 
-                    } else if (qIndex === 2) {
-                        nextQ = calibOrderRef.current[1];
-                    } else if (qIndex <= 26) {
-                        const cat = p2OrderRef.current[qIndex - 3]; 
-                        // 修正：動態濾除已使用題目，並解除題庫範圍限制
-                        nextQ = getRandomUnusedQ(cat);
-                    } else {
-                        const sorted = Object.entries(theta).sort((a, b) => b[1] - a[1]);
-                        const t1 = sorted[0][0]; const t2 = sorted[1][0];
-                        if (entangledPairs.length > 0) {
-                            const e1 = entangledPairs[0]; const e2 = entangledPairs[1];
-                            nextQ = QB.matrices.find(m => ((m.catA === e1 && m.catB === e2) || (m.catA === e2 && m.catB === e1)) && !usedMatricesRef.current.has(m.id));
-                            if (nextQ) { 
-                                usedMatricesRef.current.add(nextQ.id); 
-                                nextQ = { ...nextQ, type: "matrix" }; 
-                            } else { 
-                                const targetCat = Math.random() > 0.5 ? e1 : e2; 
-                                nextQ = getRandomUnusedQ(targetCat);
-                            }
-                        } else {
-                            nextQ = QB.matrices.find(m => ((m.catA === t1 && m.catB === t2) || (m.catA === t2 && m.catB === t1)) && !usedMatricesRef.current.has(m.id));
-                            if (nextQ) { 
-                                usedMatricesRef.current.add(nextQ.id); 
-                                nextQ = { ...nextQ, type: "matrix" }; 
-                            } else { 
-                                nextQ = getRandomUnusedQ(t1);
-                            }
-                        }
-                    }
-                    setCurrentQ(nextQ);
-                    startTimeRef.current = Date.now();
-                }
-            }, [qIndex, step, theta, entangledPairs, rerollTrigger]);
-
-            const handleAnswer = (score) => {
-                const timeCost = (Date.now() - startTimeRef.current) / 1000;
-                if (qIndex <= 2) {
-                    if (score !== currentQ.expected) {
-                        alert(`【系統校準失敗】\n指示為 ${currentQ.expected} 分，您點選了 ${score} 分。請精準依照指示作答。`);
-                        startTimeRef.current = Date.now(); return;
-                    }
-                }
-                if (qIndex > 2 && timeCost > 20.0) {
-                    alert("偵測到作答中斷。為確保數據準確，本題作廢並更換情境，請保持專注。");
-                    setRerollTrigger(prev => prev + 1); return;
-                }
-
-                let nextTheta = { ...theta };
-                let currentTe = timeCost;
-
-                if (qIndex <= 2) {
-                    if (qIndex === 2) {
-                        const prevTimeCost = history.length > 0 ? history[0].timeCost : timeCost;
-                        setTIo((prevTimeCost + timeCost) / 2);
-                    }
-                } else {
-                    currentTe = Math.max(0.1, timeCost - tIo); 
-                    if (qIndex <= 26) {
-                        const sNorm = (score - 3.5) / 2.5;
-                        nextTheta[currentQ.cat] += (1.0 * sNorm * 1.0);
-                        if (qIndex === 26) {
-                            const p2Te = [...history.filter(h => h.id > 2).map(h => h.Te), currentTe];
-                            const mean = p2Te.reduce((a, b) => a + b, 0) / 24;
-                            const std = Math.sqrt(p2Te.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / 24) || 0.1;
-                            setMuT(mean); setSigmaT(std);
-                        }
-                    } else {
-                        const Z = (currentTe - muT) / sigmaT;
-                        let W_rt = 1.0;
-                        if (Z < -0.5) W_rt = Math.min(1.5, 1 + 0.2 * Math.abs(Z));
-                        else if (Z > 0.5) W_rt = Math.max(0.2, 1 - 0.3 * Z);
-                        const sNorm = (score - 3.5) / 2.5;
-                        if (currentQ.type === "matrix") {
-                            if ((score === 3 || score === 4) && Z > 1.0) {
-                                if (!entangledPairs.includes(currentQ.catA)) setEntangledPairs(prev => [...prev, currentQ.catA, currentQ.catB]);
-                            } else {
-                                nextTheta[currentQ.catA] += (1.5 * sNorm * W_rt);
-                                nextTheta[currentQ.catB] -= (1.5 * sNorm * W_rt);
-                            }
-                        } else { nextTheta[currentQ.cat] += (1.0 * sNorm * W_rt); }
-                    }
-                }
-
-                setHistory([...history, { id: qIndex, qId: currentQ.id, timeCost, Te: currentTe, score }]);
-                setTheta(nextTheta);
-
-                const sorted = Object.entries(nextTheta).sort((a, b) => b[1] - a[1]);
-                let shouldEnd = false;
-                if (qIndex >= 32 && qIndex < 40) {
-                    if (entangledPairs.length === 0) {
-                        const gap1 = sorted[0][1] - sorted[1][1];
-                        const gap2 = sorted[1][1] - sorted[2][1];
-                        const gap3 = sorted[2][1] - sorted[3][1];
-                        if (gap1 >= 1.8 && gap2 >= 1.5 && gap3 >= 1.5) shouldEnd = true;
-                        if (gap3 < 1.0 && entangledPairs.length === 0) { setEntangledPairs([sorted[2][0], sorted[3][0]]); }
-                    }
-                }
-
-                if (shouldEnd || qIndex >= 40) { setStep("results"); } 
-                else { setQIndex(qIndex + 1); }
-            };
-
-            if (!currentQ && step === "testing") return <div className="p-10 text-center font-bold">載入引擎中...</div>;
             const sortedResults = Object.entries(theta).sort((a, b) => b[1] - a[1]);
             const radarData = Object.entries(theta).map(([k, v]) => ({ subject: ANCHORS[k].name, A: v + 5 }));
 
@@ -730,7 +762,7 @@
                             <div className="bg-indigo-600 w-8 h-8 rounded flex items-center justify-center text-white font-bold">A</div>
                             <div>
                                 <h1 className="font-bold text-slate-800 uppercase tracking-tight text-sm">Career Anchor CAT Engine</h1>
-                                <p className="text-[10px] text-slate-400 font-black uppercase">v3.4 Production Build</p>
+                                <p className="text-[10px] text-slate-400 font-black uppercase">v3.5 Card-Deck Architecture</p>
                             </div>
                         </div>
                         <div className="text-right text-[10px] font-mono text-slate-400">
@@ -741,11 +773,11 @@
                     <main className="flex-1 overflow-auto p-4 sm:p-6">
                         {step === "welcome" && (
                             <div className="max-w-4xl mx-auto py-20 flex flex-col items-center text-center">
-                                <h2 className="text-4xl font-black text-slate-900 mb-6 tracking-tighter">職涯錨定深度診斷 v3.4</h2>
+                                <h2 className="text-4xl font-black text-slate-900 mb-6 tracking-tighter">職涯錨定深度診斷 v3.5</h2>
                                 <p className="text-slate-500 max-w-xl mb-12 leading-relaxed">
                                     此為企業級高精度版本（40 題型）。系統將透過 Z-score 相對反應模型偵測您的核心動機，請依直覺快速作答。
                                 </p>
-                                <button onClick={() => setStep("testing")} className="bg-slate-900 px-12 py-5 rounded-2xl text-white font-bold text-lg hover:scale-105 transition-all shadow-xl">
+                                <button onClick={startTest} className="bg-slate-900 px-12 py-5 rounded-2xl text-white font-bold text-lg hover:scale-105 transition-all shadow-xl">
                                     啟動深度診斷 START
                                 </button>
                             </div>
@@ -759,8 +791,8 @@
                                             <span className="bg-slate-100 px-2 py-1 rounded text-[10px] font-mono font-black text-slate-500">{currentQ.id}</span>
                                             <span className="text-[10px] font-black text-slate-300 uppercase self-center">Prog: {qIndex}/40</span>
                                         </div>
-                                        <button onClick={() => window.confirm("確定重測？") && restart()} className="text-[10px] bg-slate-50 text-slate-400 px-3 py-1 rounded-full hover:bg-rose-50 hover:text-rose-500 font-bold transition-all">
-                                            ⟳ 重新開始
+                                        <button onClick={() => window.confirm("確定重置？") && setStep("welcome")} className="text-[10px] bg-slate-50 text-slate-400 px-3 py-1 rounded-full hover:bg-rose-50 hover:text-rose-500 font-bold transition-all">
+                                            ⟳ 終止並重置
                                         </button>
                                     </div>
                                     <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-12 min-h-[80px] leading-snug">{currentQ.text}</h2>
@@ -850,8 +882,8 @@
                                     </div>
                                 </div>
 
-                                <button onClick={restart} className="mt-12 w-full py-4 text-slate-400 font-bold text-xs uppercase tracking-widest hover:text-slate-600 transition-all">
-                                    — 重新進行診斷 Restart Diagnostic —
+                                <button onClick={() => setStep("welcome")} className="mt-12 w-full py-4 text-slate-400 font-bold text-xs uppercase tracking-widest hover:text-slate-600 transition-all">
+                                    — 結束並返回首頁 Return to Home —
                                 </button>
                             </div>
                         )}
