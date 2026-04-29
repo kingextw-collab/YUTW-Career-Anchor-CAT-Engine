@@ -699,10 +699,10 @@
                                         <div className="space-y-3">
                                             {sortedResults.slice(0, 4).map(([k, v]) => (
                                                 <div key={k}>
-                                                    <div className="flex justify-between text-xs font-bold mb-1">
-                                                        <span className="text-slate-300">{ANCHORS[k].name}</span>
-                                                        <span className="font-mono text-indigo-300">{v.toFixed(2)}</span>
-                                                    </div>
+													<div className="flex justify-between text-xs font-bold mb-1">
+														<span className="text-slate-300 font-black tracking-widest">{k}</span>
+														<span className="font-mono text-indigo-300">{v.toFixed(2)}</span>
+													</div>
                                                     <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
                                                         <div className="bg-indigo-500 h-full" style={{width: `${Math.max(0, (v + 5) * 10)}%`}}></div>
                                                     </div>
