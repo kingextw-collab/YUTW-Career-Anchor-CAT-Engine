@@ -63,14 +63,14 @@
         };
 
         const ANCHORS = {
-            "TF": { name: "專業/功能型", desc: "追求實務技能的極致，期望成為領域內不可或缺的專家。" },
-            "GM": { name: "管理能力型", desc: "渴望領導組織，擅長整合不同職能、統籌資源並承擔營運責任。" },
-            "AU": { name: "自主/獨立型", desc: "追求按自己的方式與節奏工作，期望保有高度的作業彈性。" },
-            "SS": { name: "安全/穩定型", desc: "重視長期保障、完善制度與組織運作的可預測性。" },
-            "EC": { name: "創造/創業型", desc: "熱衷於從無到有建立新模式或事業，願意承擔開創風險。" },
-            "S": { name: "服務/貢獻型", desc: "基於利他價值觀工作，期望工作成果能實質幫助他人或社會。" },
-            "PC": { name: "純粹挑戰型", desc: "追求克服高難度障礙，視解決極限難題與戰勝對手為動力。" },
-            "LS": { name: "生活型態型", desc: "期望工作能與個人休閒、家庭責任完美整合，追求整體平衡。" }
+            "TF": { name: "專業/功能型（專家達人）", desc: "追求實務技能的極致，期望成為領域內不可或缺的專家。" },
+            "GM": { name: "管理能力型（專業經理人）", desc: "渴望領導組織，擅長整合不同職能、統籌資源並承擔營運責任。" },
+            "AU": { name: "自主/獨立型（自主工作者）", desc: "追求按自己的方式與節奏工作，期望保有高度的作業彈性。" },
+            "SS": { name: "安全/穩定型（安穩可靠者）", desc: "重視長期保障、完善制度與組織運作的可預測性。" },
+            "EC": { name: "創造/創業型（創造者）", desc: "熱衷於從無到有建立新模式或事業，願意承擔開創風險。" },
+            "S": { name: "服務/貢獻型（俠客）", desc: "基於利他價值觀工作，期望工作成果能實質幫助他人或社會。" },
+            "PC": { name: "純粹挑戰型（挑戰者）", desc: "追求克服高難度障礙，視解決極限難題與戰勝對手為動力。" },
+            "LS": { name: "生活型態型（樂活族）", desc: "期望工作能與個人休閒、家庭責任完美整合，追求整體平衡。" }
         };
 
     const QB = {
@@ -905,10 +905,17 @@
                                         </button>
                                     </div>
                                     <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-12 min-h-[80px] leading-snug">{currentQ.text}</h2>
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                                        {[1, 2, 3, 4, 5, 6].map(s => (
-                                            <button key={s} onClick={() => handleAnswer(s)} className="h-20 sm:h-28 border-2 rounded-2xl hover:border-indigo-600 hover:bg-indigo-50 font-black text-xl text-slate-300 hover:text-indigo-600 transition-all flex flex-col items-center justify-center gap-1">
-                                                {s} <div className="text-[9px] uppercase opacity-60 font-bold">{s <= 3 ? "不符合" : "符合"}</div>
+									<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                                        {[
+                                            { score: 1, label: "最不符合" },
+                                            { score: 2, label: "不符合" },
+                                            { score: 3, label: "較不符合" },
+                                            { score: 4, label: "較符合" },
+                                            { score: 5, label: "符合" },
+                                            { score: 6, label: "最符合" }
+                                        ].map(item => (
+                                            <button key={item.score} onClick={() => handleAnswer(item.score)} className="h-20 sm:h-28 border-2 rounded-2xl hover:border-indigo-600 hover:bg-indigo-50 font-black text-xl text-slate-300 hover:text-indigo-600 transition-all flex flex-col items-center justify-center gap-1">
+                                                {item.score} <div className="text-[10px] sm:text-xs uppercase opacity-80 font-bold">{item.label}</div>
                                             </button>
                                         ))}
                                     </div>
