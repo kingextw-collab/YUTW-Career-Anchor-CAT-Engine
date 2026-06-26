@@ -18,10 +18,13 @@
 <body class="bg-slate-50 text-slate-900">
     <div id="root"></div>
 
-    <script type="text/babel" data-presets="react, env" data-plugins="transform-react-jsx" data-runtime="classic">
+    <script type="text/babel">
+    /** @jsxRuntime classic */
+    /** @jsx React.createElement */
+    
     const { useState, useRef } = React;
 
-    const RadarChart = ({ data, maxScore }) => {
+    const RadarChart = ({ data, maxScore }) =>
             const size = 400; const center = size / 2; const radius = size * 0.35;
             const dynamicMax = Math.max(10, maxScore * 1.1); 
             
