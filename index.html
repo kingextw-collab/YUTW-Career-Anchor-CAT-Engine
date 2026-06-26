@@ -18,7 +18,7 @@
 <body class="bg-slate-50 text-slate-900">
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
+    <script type="text/babel" data-presets="react" data-plugins="transform-modules-umd">
         const { useState, useRef } = React;
 
         const RadarChart = ({ data, maxScore }) => {
