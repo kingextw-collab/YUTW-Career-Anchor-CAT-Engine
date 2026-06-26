@@ -24,7 +24,7 @@
     
     const { useState, useRef } = React;
 
-    const RadarChart = ({ data, maxScore }) =>
+    const RadarChart = ({ data, maxScore }) => {
             const size = 400; const center = size / 2; const radius = size * 0.35;
             const dynamicMax = Math.max(10, maxScore * 1.1); 
             
